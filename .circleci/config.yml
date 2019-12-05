@@ -39,7 +39,19 @@ jobs:
           paths:
             - /home/circleci/project/node_modules
             - /home/circleci/project/public/static/public/bundles
+      - persist_to_workspace:
+          root: /home/circleci/
+          paths: 
+            - .cache
+            - project
 
+  test:
+    docker:
+      - image: circleci/python:3.7
+      - image: circleci/postgres:11-postgis-ram
+    steps:
+      - attach_workspace:
+          at: /home/circleci/
       # do the work
       - run:
           name: set up database
@@ -56,7 +68,7 @@ jobs:
           name: flake8
           command: poetry run flake8
 
-      # store results
+      # store results (isn't working, but we'll keep doing it)
       - store_test_results:
           path: test_results.xml
       - store_artifacts:
