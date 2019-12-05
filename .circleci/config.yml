@@ -1,0 +1,30 @@
+version: 2
+jobs:
+  build:
+    docker:
+      - image: circleci/python:3.7
+      - image: circleci/postgres:11-postgis-ram
+    steps:
+      - checkout
+      - run:
+          name: install python
+          command: |
+            pip install poetry
+            poetry install
+      - run:
+          name: install node stuff
+          command: |
+            npm ci
+            npm run build
+      - run:
+          name: set up database
+          command: |
+            psql -c "CREATE USER test with PASSWORD 'test' CREATEDB SUPERUSER;" -U postgres
+            psql -c "CREATE DATABASE test;" -U postgres
+            psql -c "CREATE EXTENSION postgis;" -U postgres -d test
+      - run:
+          name: test
+          command: poetry run pytest --ds=openstates.test_settings --reuse-db -v geo graphapi public v1 utils
+      - run:
+          name: flake8
+          command: poetry run flake8
