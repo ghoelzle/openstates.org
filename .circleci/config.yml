@@ -40,8 +40,7 @@ jobs:
           name: test
           command: poetry run pytest --ds=openstates.test_settings --reuse-db -v geo graphapi public v1 utils
           environment:
-            env:
-              DATABASE_URL="postgis://test:test@localhost/test"
+            DATABASE_URL: postgis://test:test@localhost/test
       - run:
           name: flake8
           command: poetry run flake8
