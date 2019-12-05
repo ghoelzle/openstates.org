@@ -9,21 +9,22 @@ env:
 jobs:
   allow_failures:
     - python: "3.8"
+before_install:
+    - sudo apt-get install -yq --no-install-suggests --no-install-recommends postgresql-common
+    - sudo service postgresql stop
+    - sudo apt install -yq --no-install-suggests --no-install-recommends postgresql-11 postgresql-client-11
+    - sudo service postgresql start 11
 install: 
     - pip install poetry
     - poetry install
     - npm ci
     - npm run build
 before_script:
-    - apt-get install -yq --no-install-suggests --no-install-recommends postgresql-common
-    - service postgresql stop
-    - apt install -yq --no-install-suggests --no-install-recommends postgresql-11 postgresql-client-11
-    - service postgresql start 11
     - psql -c "CREATE USER test with PASSWORD 'test' CREATEDB SUPERUSER;" -U postgres
     - psql -c "CREATE DATABASE test;" -U postgres
-    - psql -c 'CREATE ROLE travis SUPERUSER LOGIN CREATEDB;' -U postgres
+    # - psql -c 'CREATE ROLE travis SUPERUSER LOGIN CREATEDB;' -U postgres
     - psql -c "CREATE EXTENSION postgis;" -U postgres -d test
-    - cp config/database.yml.travis config/database.yml
+    # - cp config/database.yml.travis config/database.yml
 script: 
     - poetry run pytest --ds=openstates.test_settings --reuse-db -v geo graphapi public v1 utils
     - poetry run flake8
