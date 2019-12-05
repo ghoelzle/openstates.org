@@ -42,14 +42,13 @@ jobs:
           root: /home/circleci/
           paths: 
             - .cache
-            - project/public/static/public/bundles
+            - project
 
   test:
     docker:
       - image: circleci/python:3.7
       - image: circleci/postgres:11-postgis-ram
     steps:
-      - checkout
       - attach_workspace:
           at: /home/circleci/
 
