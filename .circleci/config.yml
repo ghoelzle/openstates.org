@@ -52,13 +52,11 @@ jobs:
           command: poetry run pytest --junitxml=test_results.xml --ds=openstates.test_settings --reuse-db -v geo graphapi public v1 utils
           environment:
             DATABASE_URL: postgis://test:test@localhost/test
-      - run:
-          name: flake8
-          command: poetry run flake8
 
       # store results
       - store_test_results:
           path: test_results.xml
-      - store_artifacts:
-          path: test_results.xml
-          destination: tr
+
+      - run:
+          name: flake8
+          command: poetry run flake8
