@@ -24,9 +24,9 @@ jobs:
       - run:
           name: set up database
           command: |
-            psql -c "CREATE USER test with PASSWORD 'test' CREATEDB SUPERUSER;" -U postgres
-            psql -c "CREATE DATABASE test;" -U postgres
-            psql -c "CREATE EXTENSION postgis;" -U postgres -d test
+            psql -h localhost -c "CREATE USER test with PASSWORD 'test' CREATEDB SUPERUSER;" -U postgres
+            psql -h localhost -c "CREATE DATABASE test;" -U postgres
+            psql -h localhost -c "CREATE EXTENSION postgis;" -U postgres -d test
       - run:
           name: test
           command: poetry run pytest --ds=openstates.test_settings --reuse-db -v geo graphapi public v1 utils
