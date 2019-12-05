@@ -56,7 +56,3 @@ jobs:
       # store results
       - store_test_results:
           path: test_results.xml
-
-      - run:
-          name: flake8
-          command: poetry run flake8
