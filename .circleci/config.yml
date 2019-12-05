@@ -12,9 +12,19 @@ jobs:
             curl -sL https://deb.nodesource.com/setup_13.x | sudo bash -
             sudo apt-get install -y nodejs postgresql-client libgdal-dev libpq-dev libgeos-dev
             pip install poetry
+
+      # python packages
+      - restore_cache:
+          keys:
+            - poetry-cache-v1-{{ checksum "poetry.lock" }}
       - run:
           name: install python packages
           command: poetry install
+      - save_cache:
+          key: poetry-cache-v1-{{ checksum "poetry.lock" }}
+          paths:
+            - /home/circleci/.cache/pypoetry/virtualenvs
+
       - run:
           name: install node packages
           command: |
@@ -29,6 +39,9 @@ jobs:
       - run:
           name: test
           command: poetry run pytest --ds=openstates.test_settings --reuse-db -v geo graphapi public v1 utils
+          environment:
+            env:
+              DATABASE_URL="postgis://test:test@localhost/test"
       - run:
           name: flake8
           command: poetry run flake8
