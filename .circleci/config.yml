@@ -10,8 +10,7 @@ jobs:
           name: install prereqs
           command: |
             curl -sL https://deb.nodesource.com/setup_13.x | sudo bash -
-            sudo apt-get install -y nodejs
-            sudo apt-get install -y postgresql-client
+            sudo apt-get install -y nodejs postgresql-client libgdal-dev libpq-dev libgeos-dev
             pip install poetry
       - run:
           name: install python packages
