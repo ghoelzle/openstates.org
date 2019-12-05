@@ -3,7 +3,6 @@ jobs:
   build:
     docker:
       - image: circleci/python:3.7
-      - image: circleci/postgres:11-postgis-ram
     steps:
       - checkout
       - run:
@@ -43,15 +42,22 @@ jobs:
           root: /home/circleci/
           paths: 
             - .cache
-            - project
+            - project/public/static/public/bundles
 
   test:
     docker:
       - image: circleci/python:3.7
       - image: circleci/postgres:11-postgis-ram
     steps:
+      - checkout
       - attach_workspace:
           at: /home/circleci/
+
+      - run:
+          name: install prereqs
+          command: |
+            sudo apt-get install -y postgresql-client libgdal-dev libpq-dev libgeos-dev
+
       # do the work
       - run:
           name: set up database
