@@ -32,8 +32,6 @@ before_install:
   - sudo apt-get install -y postgresql-11 postgresql-client-11
   - sudo cp /etc/postgresql/{9.6,11}/main/pg_hba.conf
   - sudo service postgresql restart 11  
-before_script:
-  - psql --version
 script: 
     - poetry run pytest --ds=openstates.test_settings --reuse-db -v geo graphapi public v1 utils
     - poetry run flake8
