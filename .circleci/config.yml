@@ -7,17 +7,17 @@ jobs:
     steps:
       - checkout
       - run:
-          name: install nodejs
+          name: install prereqs
           command: |
             curl -sL https://deb.nodesource.com/setup_13.x | sudo bash -
             sudo apt-get install -y nodejs
-      - run:
-          name: install python
-          command: |
+            sudo apt-get install -y postgresql-client
             pip install poetry
-            poetry install
       - run:
-          name: install node stuff
+          name: install python packages
+          command: poetry install
+      - run:
+          name: install node packages
           command: |
             npm ci
             npm run build
